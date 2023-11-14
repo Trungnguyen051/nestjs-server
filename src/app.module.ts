@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfig } from './config/typeOrm.config';
+import {
+  // TypeOrmPostgresConfig,
+  TypeOrmSqliteConfig,
+} from './config/typeOrm.config';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     UsersModule,
-    TypeOrmModule.forRoot(TypeOrmConfig),
+    TypeOrmModule.forRoot(TypeOrmSqliteConfig),
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
