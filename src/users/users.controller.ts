@@ -1,24 +1,32 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   NotFoundException,
+  Delete,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
-import { CreateUserDto } from './dtos/create-user.dto';
+import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { User } from 'src/users/user.entity';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from 'src/users/dtos/user.dto';
 
-@Controller('users')
+@Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  @Post('signup')
+  createUser(@Body() body: CreateUserDto) {
+    return this.userService.create(body);
+  }
+
   @Get()
   async getAll(): Promise<User[]> {
-    return this.userService.findAll();
+    return this.userService.find();
   }
 
   @Get(':id')

@@ -10,12 +10,12 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async find(): Promise<User[]> {
     return this.userRepository.find();
   }
 
   async findOne(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOneBy({ id });
   }
 
   async create(user: Partial<User>): Promise<User> {
@@ -25,7 +25,7 @@ export class UsersService {
 
   async update(id: number, user: Partial<User>): Promise<User> {
     await this.userRepository.update(id, user);
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOneBy({ id });
   }
 
   async delete(id: number): Promise<void> {
