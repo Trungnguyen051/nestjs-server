@@ -14,6 +14,6 @@ export const TypeOrmPostgresConfig: TypeOrmModuleOptions = {
 export const TypeOrmSqliteConfig: TypeOrmModuleOptions = {
   type: 'sqlite',
   database: 'db.sqlite',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
 };

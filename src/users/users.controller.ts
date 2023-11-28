@@ -13,23 +13,32 @@ import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { User } from 'src/users/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from 'src/users/dtos/user.dto';
+import { AuthService } from 'src/users/auth.service';
 
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @Post('signup')
   createUser(@Body() body: CreateUserDto) {
-    return this.userService.create(body);
+    return this.authService.signup(body.email, body.password);
   }
 
-  @Get()
+  @Post('signin')
+  signin(@Body() body: CreateUserDto) {
+    return this.authService.signin(body.email, body.password);
+  }
+
+  @Get('users')
   async getAll(): Promise<User[]> {
     return this.userService.find();
   }
 
-  @Get(':id')
+  @Get('user/:id')
   async getById(@Param('id') id: number): Promise<User> {
     const user = this.userService.findOne(id);
     if (!user) {
@@ -44,12 +53,12 @@ export class UsersController {
     return this.userService.create(user);
   }
 
-  @Put(':id')
+  @Put('user/:id')
   async put(@Param('id') id: number, @Body() user: User): Promise<User> {
     return this.userService.update(id, user);
   }
 
-  @Delete(':id')
+  @Delete('user/:id')
   async delete(@Param('id') id: number): Promise<void> {
     const user = this.userService.findOne(id);
     if (!user) {
